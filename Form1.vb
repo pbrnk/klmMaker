@@ -22,32 +22,38 @@ Public Class Form1
         Dim xmlString As String = data
 
         ' Create an XmlReader
-        Using reader As XmlReader = XmlReader.Create(New StringReader(xmlString))
 
-            While reader.Read()
-                If reader.IsStartElement() Then
-                    If reader.IsEmptyElement Then
-                        output.AppendLine(reader.Name)
-                    Else
-                        output.AppendLine(reader.Name)
-                        reader.Read() ' Read the start tag.
-                        If reader.IsStartElement() Then ' Handle nested elements.
-                            output.AppendLine(reader.Name)
+        Dim reader As XmlTextReader = New XmlTextReader("D:\Projects - W\2016-012 - W (Extract 3D From Google Earth)\Pollygrammy.kml")
+
+        Do While (reader.Read())
+                Select Case reader.NodeType
+                    Case XmlNodeType.Element 'Display beginning of element.
+                    output.Append("<" + reader.Name)
+                    If reader.HasAttributes Then 'If attributes exist
+                            While reader.MoveToNextAttribute()
+                            'Display attribute name and value.
+                            output.Append(reader.Name + "=" + reader.Value)
+                        End While
                         End If
-                        output.AppendLine(reader.ReadString()) 'Read the text content of the element.
-                    End If
-                End If
-            End While
+                    output.AppendLine(">")
+                Case XmlNodeType.Text 'Display the text in each element.
+                    output.AppendLine(reader.Value)
+                Case XmlNodeType.EndElement 'Display end of element.
+                    output.Append("</" + reader.Name)
+                    output.AppendLine(">")
+            End Select
+            Loop
+            Console.ReadLine()
 
 
-            ' reader.ReadToFollowing("book")
-            ' reader.MoveToFirstAttribute()
-            ' Dim genre As String = reader.Value
-            ' output.AppendLine("The genre value: " + genre)
+        ' reader.ReadToFollowing("book")
+        ' reader.MoveToFirstAttribute()
+        ' Dim genre As String = reader.Value
+        ' output.AppendLine("The genre value: " + genre)
 
-            ' reader.ReadToFollowing("title")
-            ' output.AppendLine("Content of the title element: " + reader.ReadElementContentAsString())
-        End Using
+        ' reader.ReadToFollowing("title")
+        ' output.AppendLine("Content of the title element: " + reader.ReadElementContentAsString())
+
 
         TextBox1.Text = output.ToString()
     End Sub
