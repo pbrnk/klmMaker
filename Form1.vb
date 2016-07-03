@@ -27,14 +27,14 @@ Public Class Form1
 
         Do While (reader.Read())
                 Select Case reader.NodeType
-                    Case XmlNodeType.Element 'Display beginning of element.
+                Case XmlNodeType.Element 'Display beginning of element.
                     output.Append("<" + reader.Name)
                     If reader.HasAttributes Then 'If attributes exist
-                            While reader.MoveToNextAttribute()
+                        While reader.MoveToNextAttribute()
                             'Display attribute name and value.
                             output.Append(reader.Name + "=" + reader.Value)
                         End While
-                        End If
+                    End If
                     output.AppendLine(">")
                 Case XmlNodeType.Text 'Display the text in each element.
                     output.AppendLine(reader.Value)
@@ -43,7 +43,7 @@ Public Class Form1
                     output.AppendLine(">")
             End Select
             Loop
-            Console.ReadLine()
+
 
 
         ' reader.ReadToFollowing("book")
